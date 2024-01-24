@@ -62,7 +62,15 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   const showModal = (bookToEdit?: Book) => {
     if (bookToEdit) {
-      form.setFieldsValue({ ...bookToEdit });
+      form.setFieldsValue({
+        title: bookToEdit.Title,
+        description: bookToEdit.Description,
+        imageUrl: bookToEdit.ImageUrl,
+        releaseYear: bookToEdit.ReleaseYear,
+        price: bookToEdit.Price,
+        totalPage: bookToEdit.TotalPage,
+        categoryID: bookToEdit.CategoryID,
+      });
       setEditingBook(bookToEdit);
     } else {
       form.resetFields();
@@ -77,11 +85,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       let responseMessage = "";
 
       if (editingBook) {
-        const updatedBook = await updateBook(editingBook.BookID, values);
+        const response = await updateBook(
+          editingBook.BookID.toString(),
+          values
+        );
+        responseMessage = response.message || "Book updated successfully";
+        const updatedBookData = response.data;
 
         setBooks((prevBooks) =>
           prevBooks?.map((book) =>
-            book.BookID === editingBook.BookID ? updatedBook : book
+            book.BookID === editingBook.BookID ? updatedBookData : book
           )
         );
         setEditingBook(null);
@@ -122,7 +135,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteBook(id);
+      await deleteBook(id.toString());
       setBooks((prevBooks) => prevBooks?.filter((book) => book.BookID !== id));
     } catch (error) {
       console.error("Error deleting book:", error);

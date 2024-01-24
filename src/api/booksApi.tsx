@@ -103,7 +103,10 @@ export const createNewBook = async (book: Book): Promise<BookResponse> => {
   }
 };
 
-export const updateBook = async (id: string, book: Book): Promise<Book> => {
+export const updateBook = async (
+  id: string,
+  book: Book
+): Promise<BookResponse> => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     throw new Error("Access token not found in local storage.");
@@ -111,7 +114,7 @@ export const updateBook = async (id: string, book: Book): Promise<Book> => {
 
   try {
     const response = await fetch(`${BOOKS_URL}/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
