@@ -6,9 +6,7 @@ interface ProtectedRouteProps {
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const role = localStorage.getItem("role");
-  const isAuthorized = isLoggedIn && (role === "admin" || role === "user");
-  return isAuthorized ? children : <Navigate to="/login" />;
+  return isLoggedIn ? children : <Navigate to="/login" />;
 }
 
 export default ProtectedRoute;

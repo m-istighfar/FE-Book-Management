@@ -20,7 +20,6 @@ export interface LoginResponse {
   refreshToken: string;
   accessTokenExp: string;
   refreshTokenExp: string;
-  role: string;
 }
 
 export interface RegisterRequest {

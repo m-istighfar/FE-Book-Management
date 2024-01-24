@@ -10,7 +10,12 @@ import { login } from "../api";
 import "./Login.css";
 
 interface LoginProps {
-  onLoginSuccess: (token: string, role: string) => void;
+  onLoginSuccess: (
+    token: string,
+    refreshToken: string,
+    accessTokenExp: string,
+    refreshTokenExp: string
+  ) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
@@ -18,28 +23,32 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    // Automatically focus on the username input when the component mounts
     form.getFieldInstance("username").focus();
   }, [form]);
 
   const onFinish = async (values: { username: string; password: string }) => {
     try {
       setLoading(true);
-      const data = await login(values.username, values.password);
-      onLoginSuccess(data.accessToken, data.role);
+      const { accessToken, refreshToken, accessTokenExp, refreshTokenExp } =
+        await login(values.username, values.password);
+      onLoginSuccess(
+        accessToken,
+        refreshToken,
+        accessTokenExp,
+        refreshTokenExp
+      );
       notification.success({
         message: "Login Successful",
         description: "You have successfully logged in!",
       });
     } catch (error) {
       console.error("Login error:", error);
-      let errorMessage = "An error occurred while logging in";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
       notification.error({
         message: "Login Failed",
-        description: errorMessage,
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while logging in",
       });
     } finally {
       setLoading(false);

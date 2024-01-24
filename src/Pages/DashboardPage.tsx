@@ -7,7 +7,6 @@ import {
   LogoutButton,
 } from "../components";
 import ContentArea from "../containers/ContentArea";
-import AdminContent from "../containers/AdminContent";
 import "../App.css";
 
 const { Sider } = Layout;
@@ -16,8 +15,6 @@ function DashboardPage() {
   const [collapsed, setCollapsed] = useState(true);
   const handleToggle = () => setCollapsed((prevState) => !prevState);
   const [selectedMenuItem, setSelectedMenuItem] = useState<string>("3");
-
-  const userRole = localStorage.getItem("role") as "admin" | "user";
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -34,23 +31,12 @@ function DashboardPage() {
       >
         <UserProfile initials="" />
         <SidebarMenu
-          userRole={userRole}
           selectedKey={selectedMenuItem}
           onSelect={setSelectedMenuItem}
         />
       </Sider>
       <ToggleButton onClick={handleToggle} />
-      {userRole === "admin" ? (
-        <AdminContent
-          isBlurred={!collapsed}
-          selectedMenuItem={selectedMenuItem}
-        />
-      ) : (
-        <ContentArea
-          isBlurred={!collapsed}
-          selectedMenuItem={selectedMenuItem}
-        />
-      )}
+      <ContentArea isBlurred={!collapsed} selectedMenuItem={selectedMenuItem} />
     </Layout>
   );
 }
