@@ -1,8 +1,8 @@
 import Login from "../containers/Login";
 
 function LoginPage() {
-  const handleLoginSuccess = (token: string) => {
-    localStorage.setItem("accessToken", token);
+  const handleLoginSuccess = (accessToken: string) => {
+    localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("isLoggedIn", "true");
 
     window.location.replace("/dashboard");

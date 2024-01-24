@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Row, Col, Modal, Form } from "antd";
 
-import moment from "moment";
 import {
-  Task,
-  fetchTasks,
-  createNewTask,
-  updateTask,
-  deleteTask,
-  markTaskAsComplete,
-} from "../api";
+  Book,
+  fetchBooks,
+  createNewBook,
+  updateBook,
+  deleteBook,
+} from "../api/booksApi";
 
-import TaskDetailsModal from "../components/TaskDetailModal";
+import BookDetailsModal from "../components/BookDetailModal";
 import ContentHeader from "../components/ContentHeader";
-import TaskCard from "../components/TaskCard";
-import TaskModal from "../components/TaskModal";
+import BookCard from "../components/BookCard";
+import BookModal from "../components/BookModal";
 
 import "./ContentArea.css";
 
@@ -27,161 +25,76 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   isBlurred,
   selectedMenuItem,
 }) => {
-  const [tasks, setTasks] = useState<Task[] | undefined>(undefined);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [isTaskDetailsModalVisible, setIsTaskDetailsModalVisible] =
+  const [books, setBooks] = useState<Book[] | undefined>(undefined);
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [isBookDetailsModalVisible, setIsBookDetailsModalVisible] =
     useState(false);
-  const [count, setCount] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filters, setFilters] = useState({});
   const [form] = Form.useForm();
 
   useEffect(() => {
     setLoading(true);
-    fetchTasks({ sortOrder, ...filters })
-      .then((data) => {
-        if (data && data.tasks) {
-          let filteredTasks = data.tasks;
-
-          if (selectedMenuItem === "3") {
-            const today = moment().startOf("day");
-            filteredTasks = data.tasks.filter((task) =>
-              moment(task.dueDate).isSame(today, "day")
-            );
-          } else if (selectedMenuItem === "4") {
-            const today = moment().startOf("isoWeek");
-            const endOfWeek = moment(today).endOf("isoWeek");
-            filteredTasks = data.tasks.filter((task) =>
-              moment(task.dueDate).isBetween(today, endOfWeek, undefined, "[]")
-            );
-          }
-
-          const completedTasksCount = data.tasks.filter(
-            (task) => task.status === "completed"
-          ).length;
-
-          setCount(
-            selectedMenuItem === "2"
-              ? completedTasksCount
-              : selectedMenuItem === "3" || selectedMenuItem === "4"
-              ? filteredTasks.length
-              : data.count
-          );
-          setTasks(filteredTasks);
+    fetchBooks()
+      .then((response) => {
+        if (response && response.data && response.data.books) {
+          setBooks(response.data.books);
+          setLoading(false);
         } else {
-          console.error("Data or tasks are undefined");
-          setTasks([]);
-          setCount(0);
+          throw new Error("Invalid response structure");
         }
-        setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching tasks:", error);
-        let errorMessage = "An error occurred while fetching tasks.";
-        if (error instanceof Error) {
-          errorMessage = error.message;
-        }
+        console.error("Error fetching books:", error);
         Modal.error({
           title: "Error",
-          content: errorMessage,
+          content: "An error occurred while fetching books.",
         });
         setLoading(false);
-        setTasks([]);
-        setCount(0);
       });
-  }, [sortOrder, filters, selectedMenuItem]);
+  }, [selectedMenuItem]);
 
-  const handleSortChange = (newSortOrder: "asc" | "desc") => {
-    setSortOrder(newSortOrder);
-  };
-
-  const handleFilterChange = (newFilters: {
-    priority?: string;
-    status?: string;
-    dueDate?: Date;
-  }) => {
-    setFilters(newFilters);
-  };
-
-  const showModal = (taskToEdit?: Task) => {
-    if (taskToEdit) {
-      form.setFieldsValue({
-        ...taskToEdit,
-        dueDate: moment(taskToEdit.dueDate),
-      });
-      setEditingTask(taskToEdit);
+  const showModal = (bookToEdit?: Book) => {
+    if (bookToEdit) {
+      form.setFieldsValue({ ...bookToEdit });
+      setEditingBook(bookToEdit);
     } else {
       form.resetFields();
-      setEditingTask(null);
+      setEditingBook(null);
     }
     setIsModalVisible(true);
   };
 
-  useEffect(() => {
-    if (editingTask === null) {
-      form.resetFields();
-    }
-  }, [editingTask, form]);
-
-  const handleCreateOrUpdateTask = async () => {
+  const handleCreateOrUpdateBook = async () => {
     try {
       const values = await form.validateFields();
-      if (editingTask) {
-        const updatedTask = await updateTask(editingTask._id, values);
-        setTasks((prevTasks) =>
-          prevTasks?.map((task) =>
-            task._id === editingTask._id ? updatedTask : task
+      if (editingBook) {
+        const updatedBook = await updateBook(editingBook.BookID, values);
+        setBooks((prevBooks) =>
+          prevBooks?.map((book) =>
+            book.BookID === editingBook.BookID ? updatedBook : book
           )
         );
-        setEditingTask(null);
+        setEditingBook(null);
       } else {
-        const newTask = await createNewTask(values);
-        setTasks((prevTasks) => [...(prevTasks || []), newTask]);
-        setCount((prevCount = 0) => prevCount + 1);
+        const newBook = await createNewBook(values);
+        setBooks((prevBooks) => [...(prevBooks || []), newBook]);
       }
-      showSuccessModal(
-        editingTask
-          ? "Task updated successfully!"
-          : "Task created successfully!"
-      );
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
       console.error("Failed to submit:", error);
-      let errorMessage =
-        "An error occurred while creating or updating the task.";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
       Modal.error({
         title: "Error",
-        content: errorMessage,
+        content: "An error occurred while creating or updating the book.",
       });
     }
   };
 
-  const handleEdit = (id: string) => {
-    const taskToEdit = tasks?.find((task) => task._id === id);
-
-    if (taskToEdit?.status === "completed") {
-      Modal.warning({
-        title: "Cannot Edit Completed Task",
-        content: "You cannot edit a task that is already completed.",
-      });
-      return;
-    }
-
-    if (taskToEdit) {
-      showModal(taskToEdit);
-    }
-  };
-
-  const showDeleteConfirm = (id: string) => {
+  const showDeleteConfirm = (id: number) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this task?",
+      title: "Are you sure you want to delete this book?",
       content: "This action cannot be undone",
       okText: "Yes",
       okType: "danger",
@@ -189,74 +102,18 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       onOk() {
         handleDelete(id);
       },
-      onCancel() {
-        console.log("Cancelled");
-      },
     });
   };
 
-  const showSuccessModal = (message: string) => {
-    Modal.success({
-      content: message,
-      onOk() {},
-      okButtonProps: {
-        className: "success-modal-ok-button",
-      },
-    });
-  };
-
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     try {
-      await deleteTask(id);
-      setTasks((prevTasks) => prevTasks?.filter((task) => task._id !== id));
-      setCount((prevCount) => prevCount && prevCount - 1);
-      showSuccessModal("Task deleted successfully!");
+      await deleteBook(id);
+      setBooks((prevBooks) => prevBooks?.filter((book) => book.BookID !== id));
     } catch (error) {
-      console.error("Error deleting task:", error);
-      let errorMessage = "An error occurred while deleting the task.";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
+      console.error("Error deleting book:", error);
       Modal.error({
         title: "Error",
-        content: errorMessage,
-      });
-    }
-  };
-
-  const showMarkCompleteConfirm = (id: string) => {
-    Modal.confirm({
-      title: "Are you sure you want to mark this task as complete?",
-      content: "You can edit the task later to change its status.",
-      okText: "Yes",
-      okType: "primary",
-      cancelText: "No",
-      onOk() {
-        handleComplete(id);
-      },
-      onCancel() {
-        console.log("Cancelled");
-      },
-    });
-  };
-
-  const handleComplete = async (id: string) => {
-    try {
-      const updatedTask = await markTaskAsComplete(id);
-      setTasks((prevTasks) =>
-        prevTasks?.map((task) => (task._id === id ? updatedTask : task))
-      );
-      showSuccessModal("Task marked as complete successfully!");
-    } catch (error) {
-      console.error("Error marking task as complete:", error);
-      let errorMessage =
-        "An error occurred while marking the task as complete.";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      Modal.error({
-        title: "Error",
-        content: errorMessage,
+        content: "An error occurred while deleting the book.",
       });
     }
   };
@@ -266,239 +123,51 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       style={{ padding: "50px", position: "relative" }}
       className={isBlurred ? "blur-content" : ""}
     >
-      {selectedMenuItem === "1" && (
-        <>
-          <ContentHeader
-            count={count}
-            onShowModal={showModal}
-            onSortChange={handleSortChange}
-            onFilterChange={handleFilterChange}
-          />
-          <hr style={{ margin: "20px 0" }} />
-          {loading ? (
-            <p>Loading...</p>
-          ) : tasks && tasks.length > 0 ? (
-            <>
-              <Row gutter={[16, 16]}>
-                {tasks.map((task, index) => (
-                  <Col key={index} xs={24} sm={24} md={8} lg={8}>
-                    <TaskCard
-                      task={task}
-                      onEdit={handleEdit}
-                      onDelete={showDeleteConfirm}
-                      onComplete={showMarkCompleteConfirm}
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setIsTaskDetailsModalVisible(true);
-                      }}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            </>
-          ) : (
-            "You don't have any task"
-          )}
-
-          <TaskModal
-            open={isModalVisible}
-            onClose={() => {
-              setIsModalVisible(false);
-              setEditingTask(null);
-              form.resetFields();
-            }}
-            onOk={handleCreateOrUpdateTask}
-            form={form}
-            editingTask={editingTask}
-          />
-
-          {selectedTask && (
-            <TaskDetailsModal
-              task={selectedTask}
-              visible={isTaskDetailsModalVisible}
-              onClose={() => {
-                setIsTaskDetailsModalVisible(false);
-                setSelectedTask(null);
-              }}
-            />
-          )}
-        </>
+      <ContentHeader count={books?.length} onShowModal={() => showModal()} />
+      <hr style={{ margin: "20px 0" }} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : books && books.length > 0 ? (
+        <Row gutter={[16, 16]}>
+          {books.map((book, index) => (
+            <Col key={index} xs={24} sm={24} md={8} lg={8}>
+              <BookCard
+                book={book}
+                onEdit={() => showModal(book)}
+                onDelete={() => showDeleteConfirm(book.BookID)}
+                onClick={() => {
+                  setSelectedBook(book);
+                  setIsBookDetailsModalVisible(true);
+                }}
+              />
+            </Col>
+          ))}
+        </Row>
+      ) : (
+        <p>You don't have any books</p>
       )}
-      {selectedMenuItem === "2" && (
-        <>
-          <ContentHeader
-            count={count}
-            onShowModal={showModal}
-            onSortChange={handleSortChange}
-            onFilterChange={handleFilterChange}
-          />
-          <hr style={{ margin: "20px 0" }} />
-          {loading ? (
-            <p>Loading...</p>
-          ) : tasks && tasks.length > 0 ? (
-            <>
-              <Row gutter={[16, 16]}>
-                {tasks
-                  .filter((task) => task.status === "completed")
-                  .map((task, index) => (
-                    <Col key={index} xs={24} sm={24} md={8} lg={8}>
-                      <TaskCard
-                        task={task}
-                        onEdit={handleEdit}
-                        onDelete={showDeleteConfirm}
-                        onComplete={showMarkCompleteConfirm}
-                        onClick={() => {
-                          setSelectedTask(task);
-                          setIsTaskDetailsModalVisible(true);
-                        }}
-                      />
-                    </Col>
-                  ))}
-              </Row>
-            </>
-          ) : (
-            <p>No completed tasks found.</p>
-          )}
 
-          <TaskModal
-            open={isModalVisible}
-            onClose={() => {
-              setIsModalVisible(false);
-              setEditingTask(null);
-              form.resetFields();
-            }}
-            onOk={handleCreateOrUpdateTask}
-            form={form}
-            editingTask={editingTask}
-          />
+      <BookModal
+        open={isModalVisible}
+        onClose={() => {
+          setIsModalVisible(false);
+          setEditingBook(null);
+          form.resetFields();
+        }}
+        onOk={handleCreateOrUpdateBook}
+        form={form}
+        editingBook={editingBook}
+      />
 
-          {selectedTask && (
-            <TaskDetailsModal
-              task={selectedTask}
-              visible={isTaskDetailsModalVisible}
-              onClose={() => {
-                setIsTaskDetailsModalVisible(false);
-                setSelectedTask(null);
-              }}
-            />
-          )}
-        </>
-      )}
-      {selectedMenuItem === "3" && (
-        <>
-          <ContentHeader
-            count={count}
-            onShowModal={showModal}
-            onSortChange={handleSortChange}
-            onFilterChange={handleFilterChange}
-          />
-          <hr style={{ margin: "20px 0" }} />
-          {loading ? (
-            <p>Loading...</p>
-          ) : tasks && tasks.length > 0 ? (
-            <>
-              <Row gutter={[16, 16]}>
-                {tasks.map((task, index) => (
-                  <Col key={index} xs={24} sm={24} md={8} lg={8}>
-                    <TaskCard
-                      task={task}
-                      onEdit={handleEdit}
-                      onDelete={showDeleteConfirm}
-                      onComplete={showMarkCompleteConfirm}
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setIsTaskDetailsModalVisible(true);
-                      }}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            </>
-          ) : (
-            <p>No tasks for today.</p>
-          )}
-
-          <TaskModal
-            open={isModalVisible}
-            onClose={() => {
-              setIsModalVisible(false);
-              setEditingTask(null);
-              form.resetFields();
-            }}
-            onOk={handleCreateOrUpdateTask}
-            form={form}
-            editingTask={editingTask}
-          />
-
-          {selectedTask && (
-            <TaskDetailsModal
-              task={selectedTask}
-              visible={isTaskDetailsModalVisible}
-              onClose={() => {
-                setIsTaskDetailsModalVisible(false);
-                setSelectedTask(null);
-              }}
-            />
-          )}
-        </>
-      )}
-      {selectedMenuItem === "4" && (
-        <>
-          <ContentHeader
-            count={count}
-            onShowModal={showModal}
-            onSortChange={handleSortChange}
-            onFilterChange={handleFilterChange}
-          />
-          <hr style={{ margin: "20px 0" }} />
-          {loading ? (
-            <p>Loading...</p>
-          ) : tasks && tasks.length > 0 ? (
-            <>
-              <Row gutter={[16, 16]}>
-                {tasks.map((task, index) => (
-                  <Col key={index} xs={24} sm={24} md={8} lg={8}>
-                    <TaskCard
-                      task={task}
-                      onEdit={handleEdit}
-                      onDelete={showDeleteConfirm}
-                      onComplete={showMarkCompleteConfirm}
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setIsTaskDetailsModalVisible(true);
-                      }}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            </>
-          ) : (
-            <p>No tasks for this week.</p>
-          )}
-
-          <TaskModal
-            open={isModalVisible}
-            onClose={() => {
-              setIsModalVisible(false);
-              setEditingTask(null);
-              form.resetFields();
-            }}
-            onOk={handleCreateOrUpdateTask}
-            form={form}
-            editingTask={editingTask}
-          />
-
-          {selectedTask && (
-            <TaskDetailsModal
-              task={selectedTask}
-              visible={isTaskDetailsModalVisible}
-              onClose={() => {
-                setIsTaskDetailsModalVisible(false);
-                setSelectedTask(null);
-              }}
-            />
-          )}
-        </>
+      {selectedBook && (
+        <BookDetailsModal
+          book={selectedBook}
+          visible={isBookDetailsModalVisible}
+          onClose={() => {
+            setIsBookDetailsModalVisible(false);
+            setSelectedBook(null);
+          }}
+        />
       )}
     </Layout.Content>
   );

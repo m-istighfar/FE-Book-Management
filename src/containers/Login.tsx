@@ -11,7 +11,7 @@ import "./Login.css";
 
 interface LoginProps {
   onLoginSuccess: (
-    token: string,
+    accessToken: string,
     refreshToken: string,
     accessTokenExp: string,
     refreshTokenExp: string

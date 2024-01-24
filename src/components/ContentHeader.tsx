@@ -1,20 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Row, Col, Button } from "antd";
 import formattedDate from "../helper/formatDateTD";
-import TaskSortingControls from "../components/TaskSortingControls";
-import TaskFilterControls from "../components/TaskFilterControls";
+import TaskSortingControls from "../components/TaskSortingControls"; // Renamed
+import TaskFilterControls from "../components/TaskFilterControls"; // Renamed
 
 interface FilterOptions {
-  priority?: string;
-  status?: string;
-  dueDate?: Date;
+  title?: string;
+  minYear?: number;
+  maxYear?: number;
+  minPage?: number;
+  maxPage?: number;
+  sortByTitle?: "asc" | "desc";
+  page?: number;
+  limit?: number;
 }
 
 interface ContentHeaderProps {
-  count?: number;
+  count: number | undefined;
   onShowModal: () => void;
-  onSortChange: (sortOrder: "asc" | "desc") => void;
-  onFilterChange: (filters: FilterOptions) => void;
+  onSortChange?: (newSortOrder: "asc" | "desc") => void;
+  onFilterChange?: (newFilters: any) => void;
 }
 
 const ContentHeader: React.FC<ContentHeaderProps> = ({
@@ -25,23 +31,24 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 }) => (
   <Row justify="space-between" align="middle" className="content-header">
     <Col>
-      <h2>Today</h2>
+      <h2>Books</h2> {/* Updated */}
       <p>{formattedDate}</p>
-      <p>{count ? `You have ${count} task(s)` : "You don't have any task"}</p>
+      <p>{count ? `You have ${count} book(s)` : "No books available"}</p>{" "}
+      {/* Updated */}
     </Col>
     <Col>
       <Row>
-        <TaskSortingControls onSortChange={onSortChange} />
-        <TaskFilterControls onFilterChange={onFilterChange} />
+        <TaskSortingControls onSortChange={onSortChange} /> {/* Renamed */}
+        <TaskFilterControls onFilterChange={onFilterChange} /> {/* Renamed */}
       </Row>
     </Col>
     <Col>
       <Button
         type="primary"
-        className="new-task-button"
+        className="new-book-button" // Updated
         onClick={() => onShowModal()}
       >
-        New task
+        New Book {/* Updated */}
       </Button>
     </Col>
   </Row>

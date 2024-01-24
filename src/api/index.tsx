@@ -56,7 +56,8 @@ export const login = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-    return await checkResponse(response);
+    const data = await checkResponse(response);
+    return data.data;
   } catch (error) {
     console.error("Error during login:", error);
     throw error;
