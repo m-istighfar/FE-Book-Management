@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Button } from "antd";
-// import { Book } from "../api";
 
 export interface Book {
   BookID: number;
