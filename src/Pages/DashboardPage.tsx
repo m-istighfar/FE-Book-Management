@@ -14,7 +14,7 @@ const { Sider } = Layout;
 function DashboardPage() {
   const [collapsed, setCollapsed] = useState(true);
   const handleToggle = () => setCollapsed((prevState) => !prevState);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("3");
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("1");
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
