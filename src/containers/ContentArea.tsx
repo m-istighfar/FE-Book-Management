@@ -135,8 +135,13 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteBook(id.toString());
+      const response = await deleteBook(id.toString());
       setBooks((prevBooks) => prevBooks?.filter((book) => book.BookID !== id));
+
+      Modal.success({
+        title: "Success",
+        content: response.message || "Book deleted successfully",
+      });
     } catch (error) {
       console.error("Error deleting book:", error);
       Modal.error({

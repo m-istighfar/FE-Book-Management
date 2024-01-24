@@ -51,6 +51,10 @@ export interface BookFilters {
   limit?: number;
 }
 
+export interface DeleteResponse {
+  message: string;
+}
+
 export const fetchBooks = async (
   filters: BookFilters = {}
 ): Promise<BooksResponse> => {
@@ -129,7 +133,7 @@ export const updateBook = async (
   }
 };
 
-export const deleteBook = async (id: string): Promise<void> => {
+export const deleteBook = async (id: string): Promise<DeleteResponse> => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     throw new Error("Access token not found in local storage.");
