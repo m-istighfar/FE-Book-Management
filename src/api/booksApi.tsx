@@ -25,6 +25,11 @@ export interface Book {
   Thickness?: string;
 }
 
+interface BookResponse {
+  message: string;
+  data: Book;
+}
+
 export interface BooksResponse {
   message: string;
   data: {
@@ -75,7 +80,7 @@ export const fetchBooks = async (
   }
 };
 
-export const createNewBook = async (book: Book): Promise<Book> => {
+export const createNewBook = async (book: Book): Promise<BookResponse> => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     throw new Error("Access token not found in local storage.");

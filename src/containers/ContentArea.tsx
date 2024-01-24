@@ -34,13 +34,12 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
+  const loadBooks = () => {
     setLoading(true);
     fetchBooks()
       .then((response) => {
         if (response && response.data && response.data.books) {
           setBooks(response.data.books);
-          setLoading(false);
         } else {
           throw new Error("Invalid response structure");
         }
@@ -51,8 +50,14 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           title: "Error",
           content: "An error occurred while fetching books.",
         });
+      })
+      .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadBooks();
   }, [selectedMenuItem]);
 
   const showModal = (bookToEdit?: Book) => {
@@ -69,8 +74,11 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   const handleCreateOrUpdateBook = async () => {
     try {
       const values = await form.validateFields();
+      let responseMessage = "";
+
       if (editingBook) {
         const updatedBook = await updateBook(editingBook.BookID, values);
+
         setBooks((prevBooks) =>
           prevBooks?.map((book) =>
             book.BookID === editingBook.BookID ? updatedBook : book
@@ -78,9 +86,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         );
         setEditingBook(null);
       } else {
-        const newBook = await createNewBook(values);
-        setBooks((prevBooks) => [...(prevBooks || []), newBook]);
+        const response = await createNewBook(values);
+        responseMessage = response.message;
+        const newBookData = response.data;
+        setBooks((prevBooks) => [...(prevBooks || []), newBookData]);
       }
+      loadBooks();
+      Modal.success({
+        title: "Success",
+        content: responseMessage,
+      });
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {

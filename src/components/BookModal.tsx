@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { Modal, Form, Input, DatePicker } from "antd";
+import { Modal, Form, Input, InputNumber } from "antd";
 
 export interface Book {
   BookID: number;
@@ -49,38 +49,42 @@ const BookModal: React.FC<BookModalProps> = ({
       >
         <Form.Item
           label="Title"
-          name="Title"
+          name="title"
           rules={[{ required: true, message: "Please input the title!" }]}
           hasFeedback
         >
           <Input />
         </Form.Item>
 
-        <Form.Item label="Description" name="Description">
+        <Form.Item label="Description" name="description">
           <Input.TextArea />
         </Form.Item>
 
         <Form.Item
           label="Image URL"
-          name="ImageUrl"
+          name="imageUrl"
           rules={[{ required: true, message: "Please input the image URL!" }]}
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           label="Release Year"
-          name="ReleaseYear"
+          name="releaseYear"
           rules={[
             { required: true, message: "Please input the release year!" },
+            {
+              type: "number",
+              min: 0,
+              message: "Release year must be a positive number!",
+            },
           ]}
         >
-          <DatePicker picker="year" format="YYYY" />
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
           label="Price"
-          name="Price"
+          name="price"
           rules={[{ required: true, message: "Please input the price!" }]}
         >
           <Input />
@@ -88,7 +92,7 @@ const BookModal: React.FC<BookModalProps> = ({
 
         <Form.Item
           label="Total Pages"
-          name="TotalPage"
+          name="totalPage"
           rules={[{ required: true, message: "Please input the total pages!" }]}
         >
           <Input type="number" />
@@ -96,7 +100,7 @@ const BookModal: React.FC<BookModalProps> = ({
 
         <Form.Item
           label="Category ID"
-          name="CategoryID"
+          name="categoryID"
           rules={[{ required: true, message: "Please input the category ID!" }]}
         >
           <Input type="number" />
