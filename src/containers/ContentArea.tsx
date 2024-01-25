@@ -39,6 +39,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   selectedMenuItem,
 }) => {
   const [books, setBooks] = useState<Book[] | undefined>(undefined);
+  const [totalRecords, setTotalRecords] = useState(0);
+
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isBookDetailsModalVisible, setIsBookDetailsModalVisible] =
@@ -60,11 +62,6 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   const pageSize = 12;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const paginatedBooks = books?.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
   const loadBooks = () => {
     setLoading(true);
     fetchBooks({
@@ -80,6 +77,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       .then((response) => {
         if (response && response.data && response.data.books) {
           setBooks(response.data.books);
+          setTotalRecords(response.data.totalRecords);
         } else {
           throw new Error("Invalid response structure");
         }
@@ -219,7 +217,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         <p>Loading...</p>
       ) : books && books.length > 0 ? (
         <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
-          {paginatedBooks?.map((book, index) => (
+          {books?.map((book, index) => (
             <Col key={index} xs={24} sm={12} md={8} lg={6} xl={4}>
               <BookCard
                 book={book}
@@ -237,15 +235,17 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         <p>You don't have any books</p>
       )}
 
-      <Pagination
-        className="custom-pagination"
-        style={{ marginTop: "24px" }}
-        current={currentPage}
-        onChange={(page) => setCurrentPage(page)}
-        total={books?.length}
-        pageSize={pageSize}
-        showSizeChanger={false}
-      />
+      <div className="pagination-wrapper">
+        <Pagination
+          className="custom-pagination"
+          style={{ marginTop: "24px" }}
+          current={currentPage}
+          onChange={(page) => setCurrentPage(page)}
+          total={totalRecords}
+          pageSize={pageSize}
+          showSizeChanger={false}
+        />
+      </div>
 
       <BookModal
         open={isModalVisible}
