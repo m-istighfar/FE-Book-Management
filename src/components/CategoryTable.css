@@ -1,0 +1,29 @@
+.category-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.category-table .ant-table-thead > tr > th {
+  text-align: center;
+}
+
+.category-table thead th,
+.category-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.category-table .table-actions Button {
+  margin-right: 10px;
+}
+
+.category-table .table-actions Button:last-child {
+  margin-right: 0;
+}
+
+.ant-btn css-dev-only-do-not-override-1qhpsh8 {
+  background-color: #40a9ff !important;
+}
