@@ -8,17 +8,34 @@ const handleLogout = () => {
   window.location.replace("/");
 };
 
-const LogoutButton: React.FC = () => (
-  <div className="logout-button">
-    <Button
-      type="text"
-      icon={<UserOutlined />}
-      style={{ color: "white" }}
-      onClick={handleLogout}
-    >
-      Logout
-    </Button>
-  </div>
-);
+const LogoutButton: React.FC = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  return (
+    <div className="logout-button">
+      {isLoggedIn ? (
+        <Button
+          type="text"
+          icon={<UserOutlined />}
+          style={{ color: "white" }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+      ) : (
+        <Button
+          type="text"
+          icon={<UserOutlined />}
+          style={{ color: "white" }}
+          onClick={() => {
+            window.location.replace("/login");
+          }}
+        >
+          Login
+        </Button>
+      )}
+    </div>
+  );
+};
 
 export default LogoutButton;
