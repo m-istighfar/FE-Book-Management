@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Layout, Row, Col, Modal, Form, Pagination } from "antd";
@@ -159,11 +160,14 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       });
       setIsModalVisible(false);
       form.resetFields();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to submit:", error);
+
+      const errorMessage = error.message || "An unknown error occurred.";
+
       Modal.error({
         title: "Error",
-        content: "An error occurred while creating or updating the book.",
+        content: errorMessage,
       });
     }
   };
