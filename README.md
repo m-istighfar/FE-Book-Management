@@ -26,7 +26,7 @@ This repository contains the frontend component of the Technical Skill Assessmen
    ```
 2. Navigate to the project directory:
    ```bash
-   cd project
+   cd project-
    ```
 3. Install dependencies:
    ```bash
