@@ -1,6 +1,6 @@
 const today = new Date();
 const formattedDate = today.toLocaleDateString("en-US", {
-  weekday: "long", // long format for day
+  weekday: "long",
   year: "numeric",
   month: "long",
   day: "numeric",

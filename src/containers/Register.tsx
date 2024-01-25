@@ -9,7 +9,7 @@ import {
   EyeTwoTone,
   PhoneOutlined,
 } from "@ant-design/icons";
-import { register } from "../api";
+import { register } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
 

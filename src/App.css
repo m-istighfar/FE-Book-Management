@@ -5,8 +5,8 @@
   padding: 20px 0;
 }
 .ant-layout-content {
-  max-height: 100vh; /* Adjust as necessary */
-  overflow: auto; /* Enable scroll inside the content area if needed */
+  max-height: 100vh;
+  overflow: auto;
 }
 .user-profile span {
   margin-left: 10px;

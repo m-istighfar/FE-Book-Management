@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Result } from "antd";
-import { verifyEmail } from "../api";
+import { verifyEmail } from "../api/authApi";
 import "./VerifyEmailPage.css";
 
 const VerifyEmailPage = (): React.ReactElement | null => {

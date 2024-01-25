@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, notification, Card } from "antd";
 import { MailOutlined } from "@ant-design/icons";
-import { requestPasswordReset } from "../api"; // Adjust the import path according to your setup
+import { requestPasswordReset } from "../api/authApi"; // Adjust the import path according to your setup
 import "./RequestPasswordReset.css";
 import { useNavigate } from "react-router-dom";
 

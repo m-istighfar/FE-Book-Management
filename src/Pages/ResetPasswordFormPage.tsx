@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Card, notification } from "antd";
 import { useNavigate } from "react-router-dom";
-import { resetPassword } from "../api";
+import { resetPassword } from "../api/authApi";
 import "./ResetPasswordFormPage.css";
 
 const PasswordResetFormPage: React.FC = () => {

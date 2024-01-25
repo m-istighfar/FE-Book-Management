@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { Layout } from "antd";
-import {
-  UserProfile,
-  SidebarMenu,
-  ToggleButton,
-  LogoutButton,
-} from "../components";
+import { UserProfile, SidebarMenu, ToggleButton } from "../components";
 import ContentArea from "../containers/ContentArea";
 import "../App.css";
 

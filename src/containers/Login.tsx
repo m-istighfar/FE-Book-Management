@@ -6,7 +6,7 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
-import { login } from "../api";
+import { login } from "../api/authApi";
 import "./Login.css";
 
 interface LoginProps {
