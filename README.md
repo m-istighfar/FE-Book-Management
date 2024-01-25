@@ -1,27 +1,42 @@
-# React + TypeScript + Vite
+# Frontend Application Documentation - Sanbercode Bootcamp Scholarship
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This repository contains the frontend component of the Technical Skill Assessment project for the Sanbercode Bootcamp Scholarship. The application is developed using React with Vite and TypeScript, and styled using Ant Design. It interacts with the backend API to manage Books and Categories, and handles user authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Features
 
-## Expanding the ESLint configuration
+- Interactive UI for managing Books and Categories
+- User authentication (login and registration)
+- Responsive design using Ant Design components
+- State management with React Context or Redux (as per your implementation)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Getting Started
 
-- Configure the top-level `parserOptions` property like this:
+### Prerequisites
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+- Node.js and npm (Node Package Manager)
+- Access to the backend API server
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/m-istighfar/Frontend_SanberTask.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd project
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Set up your environment variables in a `.env.local` file based on the provided `.env.example`.
+
+### Running the Application
+
+To start the application in development mode, run:
+```bash
+npm run dev
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
