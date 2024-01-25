@@ -53,12 +53,15 @@ const BookModal: React.FC<BookModalProps> = ({
           label="Title"
           name="title"
           rules={[{ required: true, message: "Please input the title!" }]}
-          hasFeedback
         >
           <Input />
         </Form.Item>
 
-        <Form.Item label="Description" name="description">
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: "Please input the description!" }]}
+        >
           <Input.TextArea />
         </Form.Item>
 

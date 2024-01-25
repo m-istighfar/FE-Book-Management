@@ -1,14 +1,10 @@
-import { Link } from "react-router-dom";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, List, Typography, Card, Divider } from "antd";
-
 import {
+  BookOutlined,
+  SlackOutlined,
   UserOutlined,
-  LockOutlined,
-  CheckCircleOutlined,
-  SortAscendingOutlined,
-  FunnelPlotOutlined,
-  SearchOutlined,
   LoginOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -22,63 +18,29 @@ interface FeatureItem {
   icon: JSX.Element;
 }
 
-const userAuthenticationFeatures: FeatureItem[] = [
-  { text: "Login & Register", icon: <UserAddOutlined /> },
-  { text: "Secure Password Recovery", icon: <LockOutlined /> },
+const bookManagementFeatures: FeatureItem[] = [
+  { text: "Manage Your Book Collection", icon: <BookOutlined /> },
+  { text: "Organize Books on Virtual Shelves", icon: <SlackOutlined /> },
 ];
 
-const taskManagementFeatures: FeatureItem[] = [
-  { text: "View, Add, and Edit Tasks", icon: <CheckCircleOutlined /> },
-  { text: "Task Prioritization", icon: <FunnelPlotOutlined /> },
-  { text: "Mark Tasks as Complete", icon: <CheckCircleOutlined /> },
-];
-
-const sortingAndFilteringFeatures: FeatureItem[] = [
-  { text: "Sort Tasks", icon: <SortAscendingOutlined /> },
-  { text: "Search Tasks", icon: <SearchOutlined /> },
-];
 function LandingPage() {
   return (
     <div className="landing-container">
       <Card className="landing-card">
-        <Title className="landing-title">Task Geass</Title>
+        <Title className="landing-title">Book Management App</Title>
         <Paragraph className="landing-description">
-          A modern task management application designed to help you stay
-          organized and productive.
+          A sophisticated tool designed to help you organize and manage your
+          book collection efficiently.
         </Paragraph>
 
         <Divider>Key Features</Divider>
 
         <div className="feature-section">
           <Title level={3}>
-            <UserOutlined style={{ marginRight: 8 }} /> User Authentication
+            <UserOutlined style={{ marginRight: 8 }} /> Book Management
           </Title>
           <List
-            dataSource={userAuthenticationFeatures}
-            renderItem={({ text, icon }) => (
-              <List.Item className="feature-list-item">
-                {React.cloneElement(icon, { style: { marginRight: 8 } })} {text}
-              </List.Item>
-            )}
-          />
-          <Title level={3}>
-            <CheckCircleOutlined style={{ marginRight: 8 }} /> Task Management
-          </Title>
-          <List
-            dataSource={taskManagementFeatures}
-            renderItem={({ text, icon }) => (
-              <List.Item className="feature-list-item">
-                {React.cloneElement(icon, { style: { marginRight: 8 } })} {text}
-              </List.Item>
-            )}
-          />
-
-          <Title level={3}>
-            <SortAscendingOutlined style={{ marginRight: 8 }} /> Sorting &
-            Filtering
-          </Title>
-          <List
-            dataSource={sortingAndFilteringFeatures}
+            dataSource={bookManagementFeatures}
             renderItem={({ text, icon }) => (
               <List.Item className="feature-list-item">
                 {React.cloneElement(icon, { style: { marginRight: 8 } })} {text}
