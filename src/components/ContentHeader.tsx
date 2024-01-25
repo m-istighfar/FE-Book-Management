@@ -1,26 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Row, Col, Button } from "antd";
 import formattedDate from "../helper/formatDateTD";
-import TaskSortingControls from "../components/TaskSortingControls"; // Renamed
-import TaskFilterControls from "../components/TaskFilterControls"; // Renamed
+import BookSortingControls from "./BookSortingControls";
+import BookFilterControls from "./BookFilterControls";
 
-interface FilterOptions {
+interface BookFilterOptions {
   title?: string;
-  minYear?: number;
-  maxYear?: number;
-  minPage?: number;
-  maxPage?: number;
-  sortByTitle?: "asc" | "desc";
-  page?: number;
-  limit?: number;
+  minYear?: number | null;
+  maxYear?: number | null;
+  minPage?: number | null;
+  maxPage?: number | null;
 }
 
 interface ContentHeaderProps {
   count: number | undefined;
   onShowModal: () => void;
   onSortChange?: (newSortOrder: "asc" | "desc") => void;
-  onFilterChange?: (newFilters: any) => void;
+  onFilterChange?: (newFilters: BookFilterOptions) => void;
 }
 
 const ContentHeader: React.FC<ContentHeaderProps> = ({
@@ -31,24 +27,27 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 }) => (
   <Row justify="space-between" align="middle" className="content-header">
     <Col>
-      <h2>Books</h2> {/* Updated */}
+      <h2>Books</h2>
       <p>{formattedDate}</p>
-      <p>{count ? `You have ${count} book(s)` : "No books available"}</p>{" "}
-      {/* Updated */}
+      <p>{count ? `You have ${count} book(s)` : "No books available"}</p>
     </Col>
     <Col>
-      <Row>
-        <TaskSortingControls onSortChange={onSortChange} /> {/* Renamed */}
-        <TaskFilterControls onFilterChange={onFilterChange} /> {/* Renamed */}
+      <Row gutter={16}>
+        {onSortChange && (
+          <Col>
+            <BookSortingControls onSortChange={onSortChange} />
+          </Col>
+        )}
+        {onFilterChange && (
+          <Col>
+            <BookFilterControls onFilterChange={onFilterChange} />
+          </Col>
+        )}
       </Row>
     </Col>
     <Col>
-      <Button
-        type="primary"
-        className="new-book-button" // Updated
-        onClick={() => onShowModal()}
-      >
-        New Book {/* Updated */}
+      <Button type="primary" className="new-book-button" onClick={onShowModal}>
+        New Book
       </Button>
     </Col>
   </Row>

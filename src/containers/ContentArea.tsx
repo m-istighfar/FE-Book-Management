@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Layout, Row, Col, Modal, Form, Pagination } from "antd";
 
@@ -21,6 +22,17 @@ interface ContentAreaProps {
   selectedMenuItem: string;
 }
 
+interface BookFilterOptions {
+  title?: string;
+  minYear?: number | null;
+  maxYear?: number | null;
+  minPage?: number | null;
+  maxPage?: number | null;
+  sortByTitle?: "asc" | "desc";
+  page?: number;
+  limit?: number;
+}
+
 const ContentArea: React.FC<ContentAreaProps> = ({
   isBlurred,
   selectedMenuItem,
@@ -32,6 +44,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
     useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const [filters, setFilters] = useState<BookFilterOptions>({
+    title: undefined,
+    minYear: undefined,
+    maxYear: undefined,
+    minPage: undefined,
+    maxPage: undefined,
+  });
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const [form] = Form.useForm();
 
   const pageSize = 12;
@@ -44,7 +66,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   const loadBooks = () => {
     setLoading(true);
-    fetchBooks()
+    fetchBooks({
+      title: filters.title ?? undefined,
+      minYear: filters.minYear ?? undefined,
+      maxYear: filters.maxYear ?? undefined,
+      minPage: filters.minPage ?? undefined,
+      maxPage: filters.maxPage ?? undefined,
+      sortByTitle: sortOrder,
+      page: currentPage,
+      limit: pageSize,
+    })
       .then((response) => {
         if (response && response.data && response.data.books) {
           setBooks(response.data.books);
@@ -66,7 +97,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   useEffect(() => {
     loadBooks();
-  }, [selectedMenuItem]);
+  }, [selectedMenuItem, filters, sortOrder, currentPage]);
+
+  const handleFilterChange = (newFilters: Partial<BookFilterOptions>) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (newSortOrder: "asc" | "desc") => {
+    setSortOrder(newSortOrder);
+  };
 
   const showModal = (bookToEdit?: Book) => {
     if (bookToEdit) {
@@ -164,7 +204,12 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       style={{ padding: "50px", position: "relative" }}
       className={isBlurred ? "blur-content" : ""}
     >
-      <ContentHeader count={books?.length} onShowModal={() => showModal()} />
+      <ContentHeader
+        count={books?.length}
+        onShowModal={() => showModal()}
+        onFilterChange={handleFilterChange}
+        onSortChange={handleSortChange}
+      />
       <hr style={{ margin: "20px 0" }} />
       {loading ? (
         <p>Loading...</p>
