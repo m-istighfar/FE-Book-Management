@@ -122,10 +122,10 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
     >
       <ContentHeader
         title="Categories"
-        addButtonTitle="Add Category"
         onShowModal={() => showModal()}
+        count={totalRecords}
       />
-
+      <hr style={{ margin: "20px 0" }} />
       <CategoryTable
         categories={categories}
         onEdit={showModal}

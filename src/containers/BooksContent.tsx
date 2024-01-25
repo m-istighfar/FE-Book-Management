@@ -231,6 +231,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
       className={isBlurred ? "blur-content" : ""}
     >
       <ContentHeader
+        title="Books"
         count={totalRecords}
         onShowModal={() => showModal()}
         onFilterChange={handleFilterChange}

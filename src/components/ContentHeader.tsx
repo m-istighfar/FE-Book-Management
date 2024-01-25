@@ -13,6 +13,7 @@ interface BookFilterOptions {
 }
 
 interface ContentHeaderProps {
+  title: string;
   count: number | undefined;
   onShowModal: () => void;
   onSortChange?: (newSortOrder: "asc" | "desc") => void;
@@ -20,6 +21,7 @@ interface ContentHeaderProps {
 }
 
 const ContentHeader: React.FC<ContentHeaderProps> = ({
+  title,
   count,
   onShowModal,
   onSortChange,
@@ -27,9 +29,9 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 }) => (
   <Row justify="space-between" align="middle" className="content-header">
     <Col>
-      <h2>Books</h2>
+      <h2>{title}</h2>
       <p>{formattedDate}</p>
-      <p>{count ? `You have ${count} book(s)` : "No books available"}</p>
+      <p>{count ? `You have ${count} ${title}` : `No ${title} available`}</p>
     </Col>
     <Col>
       <Row gutter={16}>
@@ -47,7 +49,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
     </Col>
     <Col>
       <Button type="primary" className="new-book-button" onClick={onShowModal}>
-        New Book
+        New Item
       </Button>
     </Col>
   </Row>
