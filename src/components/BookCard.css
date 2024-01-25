@@ -1,3 +1,98 @@
+.task-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.task-card h3 {
+  margin-top: 0;
+  padding: 8px 16px 0;
+  font-size: 18px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.task-card p {
+  padding: 4px 16px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.task-card p:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.task-card p:last-child {
+  padding-bottom: 8px;
+}
+
+.task-card-actions div button {
+  background-color: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  margin: 0;
+}
+
+.task-card-actions div:not(:last-child) button {
+  margin-right: 10px;
+}
+
+.task-card-header,
+.task-card-details {
+  padding: 8px 16px;
+}
+
+.task-card-header h3 {
+  font-size: 20px;
+  color: #333;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-card-details p {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.task-card-details p:last-child {
+  border-bottom: none;
+}
+
+.task-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.edit-icon,
+.delete-icon {
+  margin: 0 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 .edit-icon {
   color: #faad14 !important;
 }

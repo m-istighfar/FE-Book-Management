@@ -2,8 +2,7 @@ import React from "react";
 import { Card, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
-import "./BookCard.css"; // Update CSS file as needed
-
+import "./BookCard.css";
 export interface Book {
   BookID: number;
   Title: string;
@@ -33,12 +32,16 @@ const BookCard: React.FC<BookCardProps> = ({
 }) => {
   return (
     <Card className="task-card" onClick={onClick}>
-      <h3>{book.Title}</h3>
-      <p>{book.Description}</p>
-      <p>Release Year: {book.ReleaseYear}</p>
-      <p>Price: {book.Price}</p>
-      <p>Total Pages: {book.TotalPage}</p>
-      <p>Thickness: {book.Thickness}</p>
+      <div className="task-card-header">
+        <h3>{book.Title}</h3>
+      </div>
+      <div className="task-card-details">
+        <p>{book.Description}</p>
+        <p>Release Year: {book.ReleaseYear}</p>
+        <p>Price: {book.Price}</p>
+        <p>Total Pages: {book.TotalPage}</p>
+        <p>Thickness: {book.Thickness}</p>
+      </div>
       <div className="task-card-actions">
         <div>
           <Button

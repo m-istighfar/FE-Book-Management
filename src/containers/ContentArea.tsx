@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Modal, Form } from "antd";
+import { Layout, Row, Col, Modal, Form, Pagination } from "antd";
 
 import {
   Book,
@@ -33,6 +33,14 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [form] = Form.useForm();
+
+  const pageSize = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const paginatedBooks = books?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const loadBooks = () => {
     setLoading(true);
@@ -161,9 +169,9 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       {loading ? (
         <p>Loading...</p>
       ) : books && books.length > 0 ? (
-        <Row gutter={[16, 16]}>
-          {books.map((book, index) => (
-            <Col key={index} xs={24} sm={24} md={8} lg={8}>
+        <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
+          {paginatedBooks?.map((book, index) => (
+            <Col key={index} xs={24} sm={12} md={8} lg={6} xl={4}>
               <BookCard
                 book={book}
                 onEdit={() => showModal(book)}
@@ -179,6 +187,16 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       ) : (
         <p>You don't have any books</p>
       )}
+
+      <Pagination
+        className="custom-pagination"
+        style={{ marginTop: "24px" }}
+        current={currentPage}
+        onChange={(page) => setCurrentPage(page)}
+        total={books?.length}
+        pageSize={pageSize}
+        showSizeChanger={false}
+      />
 
       <BookModal
         open={isModalVisible}

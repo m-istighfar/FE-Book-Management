@@ -4,7 +4,10 @@
   justify-content: center;
   padding: 20px 0;
 }
-
+.ant-layout-content {
+  max-height: 100vh; /* Adjust as necessary */
+  overflow: auto; /* Enable scroll inside the content area if needed */
+}
 .user-profile span {
   margin-left: 10px;
   color: white;
@@ -40,72 +43,6 @@
 .blurred-content {
   filter: blur(8px);
   pointer-events: none;
-}
-
-.task-card {
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 280px;
-  position: relative;
-}
-
-.task-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.task-card h3 {
-  margin-top: 0;
-  padding: 16px 24px 0;
-  font-size: 20px;
-  color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90%;
-}
-
-.task-card p {
-  padding: 8px 24px;
-  color: #555;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90%;
-}
-
-.task-card p:not(:last-child) {
-  border-bottom: 1px solid #eee;
-}
-
-.task-card p:last-child {
-  padding-bottom: 16px;
-}
-
-.task-card-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: calc(100% - 48px);
-}
-
-.complete-icon,
-.task-card-actions div button {
-  background-color: transparent;
-  border: none;
-  color: #555;
-  cursor: pointer;
-  margin: 0;
-}
-
-.task-card-actions div:not(:last-child) button {
-  margin-right: 20px;
 }
 
 @media (max-width: 1023px) {
