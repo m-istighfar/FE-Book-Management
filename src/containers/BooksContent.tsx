@@ -55,9 +55,6 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
     useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
-    undefined
-  );
 
   const [filters, setFilters] = useState<BookFilterOptions>({
     title: undefined,
@@ -123,12 +120,9 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
     loadBooks();
   }, [filters, sortOrder, currentPage, filters.category]);
 
-  const handleFilterChange = (
-    newFilters: Partial<BookFilterOptions>,
-    newCategoryId?: number
-  ) => {
+  const handleFilterChange = (newFilters: Partial<BookFilterOptions>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
-    setSelectedCategory(newCategoryId);
+
     setCurrentPage(1);
   };
   const handleSortChange = (newSortOrder: "asc" | "desc") => {

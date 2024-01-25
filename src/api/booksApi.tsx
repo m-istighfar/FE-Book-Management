@@ -13,6 +13,11 @@ const checkResponse = async (response: Response) => {
   return response.json();
 };
 
+interface Category {
+  CategoryID: number;
+  Name: string;
+}
+
 export interface Book {
   BookID: number;
   Title: string;
@@ -23,6 +28,7 @@ export interface Book {
   TotalPage: number;
   CategoryID: number;
   Thickness?: string;
+  Category: Category;
 }
 
 interface BookResponse {

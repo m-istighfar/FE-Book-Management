@@ -28,7 +28,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
     {
       title: "No",
       key: "index",
-      render: (text: any, record: Category, index: number) =>
+      render: (_1: any, _2: Category, index: number) =>
         (currentPage - 1) * pageSize + index + 1,
       width: "20%",
     },
@@ -41,7 +41,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
     {
       title: "Actions",
       key: "actions",
-      render: (text: any, record: Category) => (
+      render: (_: any, record: Category) => (
         <span className="table-actions">
           <Button
             icon={<EditOutlined />}
