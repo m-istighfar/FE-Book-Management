@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Input, InputNumber, Select } from "antd";
-import { fetchCategories } from "../api/categoryApi";
+import React, { useState } from "react";
+import { Input, InputNumber } from "antd";
 
 interface BookFilterOptions {
   title?: string;
@@ -8,12 +7,7 @@ interface BookFilterOptions {
   maxYear?: number | null;
   minPage?: number | null;
   maxPage?: number | null;
-  category?: number | null;
-}
-
-interface Category {
-  CategoryID: number;
-  Name: string;
+  category?: string | null;
 }
 
 interface BookFilterControlsProps {
@@ -23,24 +17,12 @@ interface BookFilterControlsProps {
 const BookFilterControls: React.FC<BookFilterControlsProps> = ({
   onFilterChange,
 }) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState<string>("");
   const [minYear, setMinYear] = useState<number | null>(null);
   const [maxYear, setMaxYear] = useState<number | null>(null);
   const [minPage, setMinPage] = useState<number | null>(null);
   const [maxPage, setMaxPage] = useState<number | null>(null);
-  const [category, setCategory] = useState<number | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    fetchCategories(1, 10000)
-      .then((response) => {
-        console.log(response);
-        setCategories(response.data.categories);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+  const [category, setCategory] = useState<string | null>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -102,15 +84,15 @@ const BookFilterControls: React.FC<BookFilterControlsProps> = ({
     });
   };
 
-  const handleCategoryChange = (value: number | null) => {
-    setCategory(value);
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory(e.target.value);
     onFilterChange({
       title,
       minYear,
       maxYear,
       minPage,
       maxPage,
-      category: value,
+      category: e.target.value,
     });
   };
 
@@ -122,18 +104,6 @@ const BookFilterControls: React.FC<BookFilterControlsProps> = ({
         onChange={handleTitleChange}
         allowClear
       />
-      <Select
-        placeholder="Select Category"
-        onChange={handleCategoryChange}
-        value={category}
-        allowClear
-      >
-        {categories.map((cat) => (
-          <Select.Option key={cat.CategoryID} value={cat.CategoryID}>
-            {cat.Name}
-          </Select.Option>
-        ))}
-      </Select>
       <InputNumber
         placeholder="Min Year"
         value={minYear}
@@ -153,6 +123,12 @@ const BookFilterControls: React.FC<BookFilterControlsProps> = ({
         placeholder="Max Page Count"
         value={maxPage}
         onChange={handleMaxPageChange}
+      />
+      <Input
+        placeholder="Filter by Category"
+        value={category || ""}
+        onChange={handleCategoryChange}
+        allowClear
       />
     </div>
   );

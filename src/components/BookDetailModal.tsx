@@ -9,7 +9,7 @@ export interface Book {
   ReleaseYear: number;
   Price: string;
   TotalPage: number;
-  CategoryID: number;
+  Category: Category;
   Thickness?: string;
   CreatedAt?: string;
   UpdatedAt?: string;
@@ -19,6 +19,11 @@ interface BookDetailsModalProps {
   book: Book;
   visible: boolean;
   onClose: () => void;
+}
+
+export interface Category {
+  CategoryID: number;
+  Name: string;
 }
 
 const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
@@ -43,7 +48,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
       <p>Price: {book.Price}</p>
       <p>Total Pages: {book.TotalPage}</p>
       <p>Thickness: {book.Thickness}</p>
-      <p>Category ID: {book.CategoryID}</p>
+      <p>Category: {book.Category.Name}</p>
     </Modal>
   );
 };

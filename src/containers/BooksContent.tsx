@@ -31,6 +31,7 @@ interface BookFilterOptions {
   sortByTitle?: "asc" | "desc";
   page?: number;
   limit?: number;
+  category?: number;
 }
 
 const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
@@ -43,6 +44,9 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
     useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
+    undefined
+  );
 
   const [filters, setFilters] = useState<BookFilterOptions>({
     title: undefined,
@@ -69,6 +73,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
       sortByTitle: sortOrder,
       page: currentPage,
       limit: pageSize,
+      categoryID: filters.category ?? undefined,
     })
       .then((response) => {
         if (response && response.data && response.data.books) {
@@ -92,13 +97,16 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
 
   useEffect(() => {
     loadBooks();
-  }, [filters, sortOrder, currentPage]);
+  }, [filters, sortOrder, currentPage, filters.category]);
 
-  const handleFilterChange = (newFilters: Partial<BookFilterOptions>) => {
+  const handleFilterChange = (
+    newFilters: Partial<BookFilterOptions>,
+    newCategoryId?: number
+  ) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
+    setSelectedCategory(newCategoryId);
     setCurrentPage(1);
   };
-
   const handleSortChange = (newSortOrder: "asc" | "desc") => {
     setSortOrder(newSortOrder);
   };
@@ -203,7 +211,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
       className={isBlurred ? "blur-content" : ""}
     >
       <ContentHeader
-        count={books?.length}
+        count={totalRecords}
         onShowModal={() => showModal()}
         onFilterChange={handleFilterChange}
         onSortChange={handleSortChange}
@@ -213,7 +221,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
         <p>Loading...</p>
       ) : books && books.length > 0 ? (
         <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
-          {books?.map((book, index) => (
+          {books.map((book, index) => (
             <Col key={index} xs={24} sm={12} md={8} lg={6} xl={4}>
               <BookCard
                 book={book}

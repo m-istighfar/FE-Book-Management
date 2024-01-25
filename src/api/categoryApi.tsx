@@ -61,6 +61,7 @@ export interface BookFilters {
   sortByTitle?: "asc" | "desc";
   page?: number;
   limit?: number;
+  category?: number;
 }
 
 export const fetchCategories = async (
@@ -180,6 +181,10 @@ export const fetchBooksByCategoryId = async (
       queryParams.append(key, value.toString());
     }
   });
+
+  if (filters.category !== undefined) {
+    queryParams.append("category", filters.category.toString());
+  }
 
   try {
     const response = await fetch(

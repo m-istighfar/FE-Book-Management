@@ -145,7 +145,7 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
 
       <Modal
         title={editingCategory ? "Edit Category" : "Add Category"}
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleCreateOrUpdateCategory}
         onCancel={() => setIsModalVisible(false)}
       >
