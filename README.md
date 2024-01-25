@@ -36,7 +36,7 @@ This repository contains the frontend component of the Technical Skill Assessmen
 
 ### Running the Application
 
-To start the application in development mode, run:
+To start the application in development mode,  run:
 ```bash
 npm run dev
 ```
