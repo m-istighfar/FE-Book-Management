@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
@@ -32,7 +33,12 @@ interface BookFilterOptions {
   sortByTitle?: "asc" | "desc";
   page?: number;
   limit?: number;
-  category?: number;
+  category?: number | null;
+}
+
+export interface Category {
+  CategoryID: number;
+  Name: string;
 }
 
 const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {

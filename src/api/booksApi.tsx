@@ -49,6 +49,7 @@ export interface BookFilters {
   sortByTitle?: "asc" | "desc";
   page?: number;
   limit?: number;
+  categoryID?: number;
 }
 
 export interface DeleteResponse {
