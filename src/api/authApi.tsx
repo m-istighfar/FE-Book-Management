@@ -1,7 +1,6 @@
-// const BASE_URL = "https://expensive-boa-pajamas.cyclic.app/user";
-// const AUTH_URL = "https://expensive-boa-pajamas.cyclic.app/auth";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const AUTH_URL = "http://localhost:3000/auth";
+const AUTH_URL = `${BASE_URL}/auth`;
 
 const checkResponse = async (response: Response) => {
   if (!response.ok) {

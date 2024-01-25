@@ -1,4 +1,6 @@
-const CATEGORIES_URL = `http://localhost:3000/categories`;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+const CATEGORIES_URL = `${BASE_URL}/categories`;
 
 const checkResponse = async (response: Response) => {
   if (!response.ok) {
