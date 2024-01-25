@@ -17,6 +17,7 @@ import BookCard from "../components/BookCard";
 import BookModal from "../components/BookModal";
 
 import "./ContentArea.css";
+import { fetchCategories } from "../api/categoryApi";
 
 interface BooksContentProps {
   isBlurred: boolean;
@@ -61,6 +62,19 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
 
   const pageSize = 12;
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    fetchCategories(1, 10000)
+      .then((response) => {
+        console.log(response);
+        setCategories(response.data.categories);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
   const loadBooks = () => {
     setLoading(true);
@@ -261,6 +275,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
         onOk={handleCreateOrUpdateBook}
         form={form}
         editingBook={editingBook}
+        categories={categories}
       />
 
       {selectedBook && (

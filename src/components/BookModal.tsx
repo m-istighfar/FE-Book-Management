@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { Modal, Form, Input, InputNumber } from "antd";
+import { Modal, Form, Input, InputNumber, Select } from "antd";
 
 export interface Book {
   BookID: number;
@@ -22,6 +22,7 @@ interface BookModalProps {
   onOk: () => void;
   form: any;
   editingBook: Book | null;
+  categories: any[];
 }
 
 const BookModal: React.FC<BookModalProps> = ({
@@ -30,6 +31,7 @@ const BookModal: React.FC<BookModalProps> = ({
   onOk,
   form,
   editingBook,
+  categories,
 }) => {
   return (
     <Modal
@@ -99,11 +101,17 @@ const BookModal: React.FC<BookModalProps> = ({
         </Form.Item>
 
         <Form.Item
-          label="Category ID"
+          label="Category"
           name="categoryID"
-          rules={[{ required: true, message: "Please input the category ID!" }]}
+          rules={[{ required: true, message: "Please select the category!" }]}
         >
-          <Input type="number" />
+          <Select>
+            {categories.map((cat) => (
+              <Select.Option key={cat.CategoryID} value={cat.CategoryID}>
+                {cat.Name} {/* Display the category name */}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
       </Form>
     </Modal>
