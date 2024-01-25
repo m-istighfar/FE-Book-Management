@@ -106,6 +106,7 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
         title: "Success",
         content: response.message || "Category deleted successfully",
       });
+      loadCategories();
     } catch (error: any) {
       Modal.error({
         title: "Error",

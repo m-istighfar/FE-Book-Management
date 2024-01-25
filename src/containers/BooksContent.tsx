@@ -216,6 +216,7 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
         title: "Success",
         content: response.message || "Book deleted successfully",
       });
+      loadBooks();
     } catch (error) {
       console.error("Error deleting book:", error);
       Modal.error({
