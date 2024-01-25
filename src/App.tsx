@@ -8,7 +8,7 @@ import LandingPage from "./Pages/LandingPage";
 import RequestPasswordResetPage from "./Pages/RequestPasswordResetPage";
 import ResetPasswordInfoPage from "./Pages/ResetPasswordInfoPage";
 import ResetPasswordFromPage from "./Pages/ResetPasswordFormPage";
-import ProtectedRoute from "./components/ProtectedRoutes";
+// import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -20,9 +20,9 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
-              <DashboardPage />{" "}
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <DashboardPage />
+            // </ProtectedRoute>
           }
         />
 

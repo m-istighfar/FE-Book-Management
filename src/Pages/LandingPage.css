@@ -156,3 +156,13 @@ body {
 .register-button:hover {
   background-color: #389e0d !important;
 }
+
+.guest-button {
+  background-color: #f5222d !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.guest-button:hover {
+  background-color: #a8071a !important;
+}

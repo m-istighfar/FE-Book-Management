@@ -7,6 +7,7 @@ import {
   UserOutlined,
   LoginOutlined,
   UserAddOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
 
 import "./LandingPage.css";
@@ -64,6 +65,11 @@ function LandingPage() {
           <Link to="/register">
             <Button className="register-button" icon={<UserAddOutlined />}>
               Register
+            </Button>
+          </Link>
+          <Link to="/dashboard">
+            <Button className="guest-button" icon={<GlobalOutlined />}>
+              Continue as Guest
             </Button>
           </Link>
         </div>
