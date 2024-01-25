@@ -68,11 +68,6 @@ export const fetchCategories = async (
   page?: number,
   limit?: number
 ): Promise<CategoriesResponse> => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    throw new Error("Access token not found in local storage.");
-  }
-
   const queryParams = new URLSearchParams();
   if (page !== undefined) queryParams.append("page", page.toString());
   if (limit !== undefined) queryParams.append("limit", limit.toString());
@@ -82,8 +77,7 @@ export const fetchCategories = async (
       `${CATEGORIES_URL}?${queryParams.toString()}`,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Remove Authorization header
         },
       }
     );
@@ -170,11 +164,6 @@ export const fetchBooksByCategoryId = async (
   categoryId: number,
   filters: BookFilters = {}
 ): Promise<BooksResponse> => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    throw new Error("Access token not found in local storage.");
-  }
-
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -191,8 +180,7 @@ export const fetchBooksByCategoryId = async (
       `${CATEGORIES_URL}/${categoryId}/books?${queryParams.toString()}`,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Remove Authorization header
         },
       }
     );

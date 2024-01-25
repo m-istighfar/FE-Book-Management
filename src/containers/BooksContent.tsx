@@ -19,6 +19,7 @@ import BookModal from "../components/BookModal";
 
 import "./ContentArea.css";
 import { fetchCategories } from "../api/categoryApi";
+import { useNavigate } from "react-router-dom";
 
 interface BooksContentProps {
   isBlurred: boolean;
@@ -41,7 +42,10 @@ export interface Category {
   Name: string;
 }
 
+const isAuthenticated = !!localStorage.getItem("accessToken");
+
 const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
+  const navigate = useNavigate();
   const [books, setBooks] = useState<Book[] | undefined>(undefined);
   const [totalRecords, setTotalRecords] = useState(0);
 
@@ -132,6 +136,19 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
   };
 
   const showModal = (bookToEdit?: Book) => {
+    if (!isAuthenticated) {
+      Modal.warning({
+        title: "Login Required",
+        content: "You must log in before performing this action.",
+        okText: "Go to Login",
+        cancelText: "Close",
+        onOk: () => {
+          navigate("/login");
+        },
+        onCancel: () => {},
+      });
+      return;
+    }
     if (bookToEdit) {
       form.setFieldsValue({
         title: bookToEdit.Title,
@@ -195,6 +212,19 @@ const BooksContent: React.FC<BooksContentProps> = ({ isBlurred }) => {
   };
 
   const showDeleteConfirm = (id: number) => {
+    if (!isAuthenticated) {
+      Modal.warning({
+        title: "Login Required",
+        content: "You must log in before performing this action.",
+        okText: "Go to Login",
+        cancelText: "Close",
+        onOk: () => {
+          navigate("/login");
+        },
+        onCancel: () => {},
+      });
+      return;
+    }
     Modal.confirm({
       title: "Are you sure you want to delete this book?",
       content: "This action cannot be undone",

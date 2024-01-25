@@ -59,11 +59,6 @@ export interface DeleteResponse {
 export const fetchBooks = async (
   filters: BookFilters = {}
 ): Promise<BooksResponse> => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    throw new Error("Access token not found in local storage.");
-  }
-
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -74,8 +69,7 @@ export const fetchBooks = async (
   try {
     const response = await fetch(`${BOOKS_URL}?${queryParams.toString()}`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", //
       },
     });
     return await checkResponse(response);

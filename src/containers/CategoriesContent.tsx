@@ -13,10 +13,13 @@ import CategoryTable from "../components/CategoryTable";
 import ContentHeader from "../components/ContentHeader";
 
 import "./ContentArea.css";
+import { useNavigate } from "react-router-dom";
 
 interface CategoriesContentProps {
   isBlurred: boolean;
 }
+
+const isAuthenticated = !!localStorage.getItem("accessToken");
 
 const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -27,6 +30,8 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
 
   const [form] = Form.useForm();
   const pageSize = 10;
+
+  const navigate = useNavigate();
 
   const loadCategories = async () => {
     try {
@@ -46,6 +51,19 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
   }, [currentPage]);
 
   const showModal = (category?: Category) => {
+    if (!isAuthenticated) {
+      Modal.warning({
+        title: "Login Required",
+        content: "You must log in before performing this action.",
+        okText: "Go to Login",
+        cancelText: "Close",
+        onOk: () => {
+          navigate("/login");
+        },
+        onCancel: () => {},
+      });
+      return;
+    }
     if (category) {
       form.setFieldsValue({
         name: category.Name,
@@ -84,6 +102,19 @@ const CategoriesContent: React.FC<CategoriesContentProps> = ({ isBlurred }) => {
   };
 
   const showDeleteConfirm = (categoryId: number) => {
+    if (!isAuthenticated) {
+      Modal.warning({
+        title: "Login Required",
+        content: "You must log in before performing this action.",
+        okText: "Go to Login",
+        cancelText: "Close",
+        onOk: () => {
+          navigate("/login");
+        },
+        onCancel: () => {},
+      });
+      return;
+    }
     Modal.confirm({
       title: "Are you sure you want to delete this category?",
       content: "This action cannot be undone",
